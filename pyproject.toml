@@ -10,6 +10,7 @@ packages = [{include = "mimic"}]
 [tool.poetry.dependencies]
 python = "^3.8"
 dnspython = "^2.4.2"
+flask = "^2.3.3"
 
 [build-system]
 requires = ["poetry-core"]

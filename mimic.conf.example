@@ -12,6 +12,8 @@ listen_ip = 127.0.0.1
 listen_port = 9600
 
 [client]
-server_hostname = 'mimic.example.com'
-server_ip = '198.2.3.4'
+server_hostname = localhost
+server_ip = 127.0.0.1
 server_port = 9600
+http_hostname = localhost
+http_port = 9601

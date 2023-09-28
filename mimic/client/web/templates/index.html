@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+    <title>Please wait...</title>
+
+    <link href="https://theme.er.kcl.ac.uk/css/app.css?1693840662" rel="stylesheet" />
+    <link href="https://theme.er.kcl.ac.uk/css/custom-wholeform.css?1693840662" rel="stylesheet" />
+</head>
+
+<body class="whole-page text-center">
+    <div class="full-element">
+        <nav id="primary_nav" class="navbar navbar-expand-lg navbar-dark bg-primary">
+            <a class="navbar-brand" href="#">
+                <img src="https://theme.er.kcl.ac.uk/images/kcl-logo.svg?1693840662" class="d-inline-block align-top" alt="" />
+                Please wait...
+            </a>
+        </nav>
+        <div class="p-3">
+            <p>Welcome <b>{{ display_name }}</b>, please wait... we are spawning an instance for you.</p>
+            <p id="msg"><i class="fa fa-spin fa-spinner"></i></p>
+        </div>
+    </div>
+    <script src="https://theme.er.kcl.ac.uk/js/app.js?1693840662"></script>
+    <script type="text/javascript" charset="utf-8">
+        $(document).ready(function() {
+            $.ajax({
+                type: "GET",
+                url: "{{ url_for('spawn') }}",
+                async: true,
+                cache: false,
+                timeout: 240000,
+
+                success: function(data) {
+                    console.log(data)
+                    if (data.result == "success") {
+                        $("#msg").text("Your instance is ready! Please wait while we redirect you...");
+                        window.location.href = data.url;
+                    } else {
+                        $("#msg").text("Oops! Looks like we couldn't spawn an instance, please refresh the page to try again.");
+                    }
+                },
+                error: function(XMLHttpRequest, textStatus, errorThrown) {
+                    console.log(textStatus + " (" + errorThrown + ")");
+                    $("#msg").text("Oops! Looks like we couldn't spawn an instance, please refresh the page to try again.");
+                }
+            });
+        });
+    </script>
+</body>
+
+</html>

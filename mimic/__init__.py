@@ -7,6 +7,7 @@ import time
 from mimic.common.utils import close_thread
 from mimic.common.context import MimicContext
 from mimic.client.socket import MimicClientSocket
+from mimic.client.web.flask import MimicClientFlask
 from mimic.server.socket import MimicServerSocket
 
 def run_client():
@@ -15,12 +16,9 @@ def run_client():
     socket_thread = Process(target=server.run)
     socket_thread.start()
 
-    # TODO: main thread.
-    try:
-        while True:
-            time.sleep(1)
-    except KeyboardInterrupt:
-        pass
+    # Web thread.
+    webserver = MimicClientFlask(ctx)
+    webserver.run()
     
     # Terminate server.
     server.terminate()
