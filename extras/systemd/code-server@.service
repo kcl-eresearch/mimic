@@ -1,0 +1,13 @@
+[Unit]
+Description=code-server
+After=network.target
+
+[Service]
+Type=exec
+ExecStart=/usr/bin/code-server --socket /var/run/mimic/%i/vscode.sock --socket-mode 0777 --auth none
+Restart=always
+User=%i
+PrivateTmp=True
+
+[Install]
+WantedBy=default.target

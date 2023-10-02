@@ -1,0 +1,13 @@
+[Unit]
+Description=jupyterlab
+After=network.target
+
+[Service]
+Type=exec
+ExecStart=/users/%i/.kcl-mimic/conda/bin/jupyter lab --ServerApp.base_url='/users/%i/' --NotebookApp.token='' --NotebookApp.password='' --ServerApp.allow_remote_access=true --sock /var/run/mimic/%i/jupyterlab.sock --ServerApp.sock_mode=0777 --NotebookApp.allow_origin='*'  --ServerApp.root_dir=/users/%i/
+Restart=always
+User=%i
+PrivateTmp=True
+
+[Install]
+WantedBy=default.target
