@@ -1,4 +1,4 @@
-from flask import Flask, render_template
+from flask import Flask, request, render_template
 
 class MimicClientFlask:
     def __init__(self, ctx):
@@ -14,9 +14,11 @@ class MimicClientFlask:
 
         @app.route('/spawn')
         def spawn():
+            username = request.environ.get('REMOTE_USER')
+            self.ctx.client.spawn(username)
             return {
                 'result': 'success',
-                'url': ''
+                'url': "%s/users/%s/" % (self.ctx.config.get('client', 'url'), username)
             }
     
     def run(self):
