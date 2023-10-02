@@ -3,41 +3,35 @@
 #
 
 from multiprocessing import Process
-import time
-from mimic.common.utils import close_thread
 from mimic.common.context import MimicContext
-from mimic.client.socket import MimicClientSocket
+from mimic.client.client import MimicClient
 from mimic.client.web.flask import MimicClientFlask
-from mimic.server.socket import MimicServerSocket
+from mimic.server.server import MimicServer
+from mimic.server.web.flask import MimicServerFlask
 
 def run_client():
     ctx = MimicContext()
-    server = MimicClientSocket(ctx)
-    socket_thread = Process(target=server.run)
-    socket_thread.start()
+
+    # Send a message to the server
+    client = MimicClient(ctx)
+    client.register()
+    client_thread = Process(target=client.run_thread)
+    client_thread.start()
 
     # Web thread.
     webserver = MimicClientFlask(ctx)
     webserver.run()
-    
-    # Terminate server.
-    server.terminate()
-    close_thread(socket_thread)
+
+    # Unregister.
+    client.unregister()
 
 def run_server():
     ctx = MimicContext()
-    server = MimicServerSocket(ctx)
-    socket_thread = Process(target=server.run)
-    socket_thread.start()
 
-    # Main thread ticker.
-    try:
-        while True:
-            time.sleep(1)
-            server.tidy_clients()
-    except KeyboardInterrupt:
-        pass
-    
-    # Terminate server.
-    server.terminate()
-    close_thread(socket_thread)
+    server = MimicServer(ctx)
+    server_thread = Process(target=server.run_thread)
+    server_thread.start()
+
+    # Web thread.
+    webserver = MimicServerFlask(ctx, server)
+    webserver.run()
