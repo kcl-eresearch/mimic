@@ -2,11 +2,10 @@
 # Mimic - Deploy web applications as users
 #
 
-import time
 import os
 import requests
-
-from mimic.client.applications.vscode import AppVSCode
+import subprocess
+import time
 
 class MimicClient:
     def __init__(self, ctx) -> None:
@@ -21,13 +20,11 @@ class MimicClient:
     def spawn(self, username) -> None:
         app_name = self.ctx.config.get('client', 'app')
 
-        app = self.get_app_object(app_name)
-        if app is None:
-            raise Exception("Unknown app: %s" % app_name)
-    
-        self.load += 1
-        app.run(username)
-        app.wait_for_startup()
+        try:
+            subprocess.check_output(['sudo', '/usr/local/bin/mimic', app_name, username], shell=True)
+            self.load += 1
+        except Exception as e:
+            pass
     
     def run_thread(self) -> None:
         cull_time = time.time()
@@ -43,16 +40,11 @@ class MimicClient:
                 cull_time = current_time
 
                 # Cull old sessions.
-                # Search /var/run/mimic/{username}/{app}.sock
-                path = "/var/run/mimic"
-                for username in os.listdir(path):
-                    for socket in os.listdir("%s/%s" % (path, username)):
-                        if socket.endswith(".sock"):
-                            app = self.get_app_object(socket[:-5])
-                            if app is None:
-                                continue
-                            if app.check_heartbeat(username):
-                                self.load -= 1
+                try:
+                    ret = subprocess.check_output(['sudo', '/usr/local/bin/mimic-cleanup'], shell=True)
+                    self.load -= int(ret)
+                except Exception as e:
+                    pass
 
             ticktime = end_time - time.time()
             if ticktime > 0:
