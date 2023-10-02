@@ -14,8 +14,9 @@ class MimicServerClient:
         self.load = 0
         self.heartbeat()
     
-    def heartbeat(self) -> None:
+    def heartbeat(self, client_load) -> None:
         self._last_heartbeat = time.time()
+        self.load = client_load
     
     def is_alive(self) -> bool:
         return self._last_heartbeat > time.time() - 300

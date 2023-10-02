@@ -12,10 +12,10 @@ class MimicServer:
     def register_client(self, client) -> None:
         self.active_clients[client.name] = client
     
-    def heartbeat_client(self, client_name) -> None:
+    def heartbeat_client(self, client_name, client_load) -> None:
         if client_name not in self.active_clients:
             return
-        self.active_clients[client_name].heartbeat()
+        self.active_clients[client_name].heartbeat(client_load)
     
     def unregister_client(self, client_name) -> None:
         if client_name not in self.active_clients:

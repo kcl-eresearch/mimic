@@ -45,15 +45,8 @@ class MimicServerFlask:
             if not verify_token():
                 return 'Invalid token', 403
             client_name = request.form.get('name')
-            self.server.heartbeat_client(client_name)
-        
-        @app.route('/api/client/load', methods=['POST'])
-        def set_load_client():
-            if not verify_token():
-                return 'Invalid token', 403
-            client_name = request.form.get('name')
             client_load = request.form.get('load')
-            self.server.active_clients[client_name].load = client_load
+            self.server.heartbeat_client(client_name, client_load)
     
     def run(self):
         host = self.ctx.config.get('client', 'host', fallback='localhost')

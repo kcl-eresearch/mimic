@@ -31,8 +31,9 @@ class AppVSCode(App):
     def check_heartbeat(self, username) -> bool:
         heartbeat = "/users/%s/.local/share/code-server/heartbeat" % username
         if os.path.exists(heartbeat) and self.is_heartbeat_active(heartbeat):
-            return
+            return False
         self.stop()
+        return True
 
     def stop(self, username) -> None:
         print("Stopping vscode app for user %s" % username)
