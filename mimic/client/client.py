@@ -48,7 +48,7 @@ class MimicClient:
                 time.sleep(ticktime)
             
     def is_standalone(self) -> bool:
-        return self.ctx.config.getboolean('client', 'standalone')
+        return self.ctx.config.getboolean('client', 'standalone', fallback=False)
         
     def heartbeat(self) -> None:
         if self.is_standalone():
