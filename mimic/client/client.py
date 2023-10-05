@@ -17,14 +17,17 @@ class MimicClient:
             return AppVSCode(self.ctx)
         return None
     
-    def spawn(self, username) -> None:
+    def spawn(self, username) -> bool:
         app_name = self.ctx.config.get('client', 'app')
 
         try:
             subprocess.check_output(['sudo', '/usr/local/bin/mimic', app_name, username], shell=True)
             self.load += 1
+            return True
         except Exception as e:
             pass
+    
+        return False
     
     def run_thread(self) -> None:
         cull_time = time.time()
