@@ -15,7 +15,8 @@ class MimicContext:
     def load_args(self) -> dict:
         args = argparse.ArgumentParser()
         args.add_argument('-c', '--config', default='/etc/mimic/mimic.conf', help='Path to config file')
-        return args.parse_args()
+        (actual_args, _) = args.parse_known_args()
+        return actual_args
 
     def load_config(self) -> configparser.ConfigParser:
         config = configparser.ConfigParser()

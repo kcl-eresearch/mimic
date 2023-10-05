@@ -2,7 +2,6 @@
 # Mimic - Deploy web applications as users
 #
 
-import os
 import requests
 import subprocess
 import time
@@ -11,11 +10,6 @@ class MimicClient:
     def __init__(self, ctx) -> None:
         self.ctx = ctx
         self.load = 0
-    
-    def get_app_object(self, app_name) -> None:
-        if app_name == 'vscode':
-            return AppVSCode(self.ctx)
-        return None
     
     def spawn(self, username) -> bool:
         app_name = self.ctx.config.get('client', 'app')
@@ -51,7 +45,7 @@ class MimicClient:
 
             ticktime = end_time - time.time()
             if ticktime > 0:
-                time.sleep()
+                time.sleep(ticktime)
             
     def is_standalone(self) -> bool:
         return self.ctx.config.getboolean('client', 'standalone')

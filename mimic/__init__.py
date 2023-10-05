@@ -17,13 +17,17 @@ def run_client():
     client.register()
     client_thread = Process(target=client.run_thread)
     client_thread.start()
+    ctx.logger.info("Spawning client thread.")
 
     # Web thread.
     webserver = MimicClientFlask(ctx)
-    webserver.run()
+    if ctx.config.getboolean('client', 'debug', fallback=False):
+        webserver.run()
 
-    # Unregister.
-    client.unregister()
+        # Unregister.
+        client.unregister()
+    else:
+        return webserver.app
 
 def run_server():
     ctx = MimicContext()
@@ -34,4 +38,7 @@ def run_server():
 
     # Web thread.
     webserver = MimicServerFlask(ctx, server)
-    webserver.run()
+    if ctx.config.getboolean('client', 'debug', fallback=False):
+        webserver.run()
+    else:
+        return webserver.app

@@ -1,6 +1,6 @@
 import re
 from flask import Flask, request, render_template
-from mimic.client import MimicClient
+from mimic.client.client import MimicClient
 
 class MimicClientFlask:
     def __init__(self, ctx):
@@ -18,15 +18,23 @@ class MimicClientFlask:
         @app.route('/spawn')
         def spawn():
             username = request.environ.get('MELLON_uid')
-            re = re.compile('[^a-zA-Z0-9]')
-            username = re.sub('', username)
+            if not username:
+                return {
+                    'result': 'failure'
+                }
 
+            # Sanitise.
+            regex = re.compile('[^a-zA-Z0-9]')
+            username = regex.sub('', username)
+
+            # Spawn.
             client = MimicClient(self.ctx)
             if client.spawn(username):
                 return {
                     'result': 'success',
                     'url': "%s/users/%s/" % (self.ctx.config.get('client', 'url'), username)
                 }
+
             return {
                 'result': 'failure'
             }
