@@ -9,8 +9,10 @@ from mimic.client.web.flask import MimicClientFlask
 from mimic.server.server import MimicServer
 from mimic.server.web.flask import MimicServerFlask
 
-def run_client():
-    ctx = MimicContext()
+def run_client(app):
+    ctx = MimicContext({
+        'config': "/etc/mimic/mimic-%s.conf" % app
+    })
 
     # Send a message to the server
     client = MimicClient(ctx)
