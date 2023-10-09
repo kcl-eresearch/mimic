@@ -12,12 +12,12 @@ class MimicClientFlask:
 
         @app.route('/')
         def index():
-            display_name = request.environ.get('MELLON_displayname')
+            display_name = request.headers.get('X-Webauth-Name')
             return render_template('index.html', display_name=display_name)
 
         @app.route('/spawn')
         def spawn():
-            username = request.environ.get('MELLON_uid')
+            username = request.headers.get('X-Webauth-User')
             if not username:
                 return {
                     'result': 'failure'
