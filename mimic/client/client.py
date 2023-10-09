@@ -15,7 +15,7 @@ class MimicClient:
         app_name = self.ctx.config.get('client', 'app')
 
         try:
-            subprocess.check_output(['sudo', '/usr/local/bin/mimic', app_name, username], shell=True)
+            subprocess.check_output(['sudo', '/usr/local/bin/mimic', app_name, username])
             self.load += 1
             return True
         except Exception as e:
@@ -38,7 +38,7 @@ class MimicClient:
 
                 # Cull old sessions.
                 try:
-                    ret = subprocess.check_output(['sudo', '/usr/local/bin/mimic-cleanup'], shell=True)
+                    ret = subprocess.check_output(['sudo', '/usr/local/bin/mimic-cleanup'])
                     self.load -= int(ret)
                 except Exception as e:
                     pass
