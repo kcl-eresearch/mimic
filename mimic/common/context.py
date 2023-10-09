@@ -2,7 +2,6 @@
 # Mimic - Deploy web applications as users
 #
 
-import argparse
 import configparser
 import logging
 
@@ -13,7 +12,7 @@ class MimicContext:
         self.logger = logging.getLogger("mimic")
 
     def load_config(self) -> configparser.ConfigParser:
-        configfile = '/etc/mimic/mimic.conf' if "config" not in self.args else self.args.config
+        configfile = '/etc/mimic/mimic.conf' if "config" not in self.args else self.args['config']
         config = configparser.ConfigParser()
         config.read(configfile)
         return config
