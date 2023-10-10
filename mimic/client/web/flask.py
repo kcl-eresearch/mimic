@@ -32,12 +32,18 @@ class MimicClientFlask:
             if client.spawn(username):
                 return {
                     'result': 'success',
-                    'url': "%s/users/%s/" % (self.ctx.config.get('client', 'url'), username)
+                    'url': self.get_redirect_url(username)
                 }
 
             return {
                 'result': 'failure'
             }
+    
+    def get_redirect_url(self, username):
+        redirecturl = self.ctx.config.get('client', 'url')
+        slash = '/' if redirecturl[-1] != '/' else ''
+        redirecturl = "%s%susers/%s/" % (redirecturl, slash, username)
+        return redirecturl
     
     def run(self):
         host = self.ctx.config.get('client', 'host', fallback='localhost')
