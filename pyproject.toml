@@ -14,6 +14,9 @@ flask = "^2.3.3"
 requests = "^2.31.0"
 gunicorn = "^21.2.0"
 
+[tool.poetry.group.dev.dependencies]
+black = "^23.10.0"
+
 [build-system]
 requires = ["poetry-core"]
 build-backend = "poetry.core.masonry.api"
