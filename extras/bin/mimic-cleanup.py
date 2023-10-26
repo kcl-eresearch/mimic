@@ -26,5 +26,6 @@ path = "/var/run/mimic"
 for username in os.listdir(path):
     for app in os.listdir("%s/%s" % (path, username)):
         if app.endswith(".sock"):
-            print("Removing %s/%s/%s" % (path, username, app))
+            print("Stopping %s/%s/%s" % (path, username, app))
+            app = app[:-5]
             stop_app(username, app)
