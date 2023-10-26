@@ -15,6 +15,7 @@ def stop_app(username, app):
         heartbeat = "/users/%s/.local/share/code-server/heartbeat" % username
         if os.path.exists(heartbeat) and is_heartbeat_active(heartbeat):
             return
+        print("Stopping %s-%s" % (username, app))
         os.system("systemctl stop code-server@%s" % username)
         return
 
@@ -26,6 +27,4 @@ path = "/var/run/mimic"
 for username in os.listdir(path):
     for app in os.listdir("%s/%s" % (path, username)):
         if app.endswith(".sock"):
-            print("Stopping %s/%s/%s" % (path, username, app))
-            app = app[:-5]
-            stop_app(username, app)
+            stop_app(username, app[:-5])
