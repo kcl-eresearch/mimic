@@ -1,6 +1,6 @@
 [tool.poetry]
 name = "mimic"
-version = "0.1.0"
+version = "1.2.0"
 description = "Mimic lets you securely deploy web applications at scale"
 authors = ["Skylar Kelty <skylar.kelty@kcl.ac.uk>"]
 license = "MIT"
@@ -24,3 +24,4 @@ build-backend = "poetry.core.masonry.api"
 [tool.poetry.scripts]
 server = 'mimic:run_server'
 client = 'mimic:run_client'
+mimic = 'mimic:admin_command'

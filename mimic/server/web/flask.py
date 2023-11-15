@@ -67,6 +67,18 @@ class MimicServerFlask:
             if client_name and self.server.heartbeat_client(client_name, client_load):
                 return "OK"
             return "ERROR", 500
+    
+        @app.route("/api/admin/status", methods=["GET"])
+        def admin_status():
+            num_clients = len(self.server.active_clients)
+            return f"OK ({num_clients} active hosts connected)"
+    
+        @app.route("/api/admin/clients", methods=["GET"])
+        def admin_client_list():
+            ret = ""
+            for client in self.server.active_clients.values():
+                ret += "%s\n" % client
+            return ret
 
     def run(self):
         host = self.ctx.config.get("client", "host", fallback="localhost")

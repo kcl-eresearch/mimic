@@ -2,8 +2,9 @@
 # Mimic - Deploy web applications as users
 #
 
-__VERSION__ = "1.1"
+__VERSION__ = "1.2"
 
+import argparse
 from multiprocessing import Process
 from mimic.common.context import MimicContext
 from mimic.client.client import MimicClient
@@ -46,3 +47,33 @@ def run_server():
         webserver.run()
     else:
         return webserver.app
+
+def call_admin_command(command, args = {}):
+    # Call /api/status on server admin URL.
+    ctx = MimicContext()
+    host = ctx.config.get("client", "host", fallback="localhost")
+    port = int(ctx.config.get("client", "port", fallback=9601))
+    url = f"http://{host}:{port}/api/admin/{command}"
+
+    import requests
+    r = requests.get(url)
+    print(r.text)
+
+def admin_command():
+    parser = argparse.ArgumentParser()
+    subparsers = parser.add_subparsers(title="commands", dest="command")
+
+    # status command
+    parser_status = subparsers.add_parser("status", help="Show status information")
+    parser_status.set_defaults(func=lambda args: call_admin_command("status"))
+
+    # client ls command
+    parser_client_ls = subparsers.add_parser("client ls", help="List clients")
+    parser_client_ls.set_defaults(func=lambda args: call_admin_command("clients"))
+
+    args = parser.parse_args()
+
+    if hasattr(args, 'func'):
+        args.func(args)
+    else:
+        parser.print_help()
