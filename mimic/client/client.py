@@ -71,7 +71,8 @@ class MimicClient:
             },
         )
         if req.status_code != 200:
-            self.ctx.logger.error("Failed to heartbeat client: %s" % req.text)
+            self.ctx.logger.error("Failed to heartbeat client, trying to re-register. Got '%s'" % req.text)
+            self.register()
 
     def register(self) -> None:
         if self.is_standalone():
