@@ -67,8 +67,9 @@ def admin_command():
     parser_status.set_defaults(func=lambda args: call_admin_command("status"))
 
     # client ls command
-    parser_client_ls = subparsers.add_parser("client ls", help="List clients")
-    parser_client_ls.set_defaults(func=lambda args: call_admin_command("clients"))
+    parser_client_ls = subparsers.add_parser("client", help="Client commands")
+    parser_client_ls.add_argument("command", choices=["ls"], help="Command to run")
+    parser_client_ls.set_defaults(func=lambda args: call_admin_command("clients", args))
 
     args = parser.parse_args()
 
