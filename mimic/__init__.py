@@ -51,7 +51,7 @@ def run_server():
 def call_admin_command(command, args = {}):
     # Call /api/status on server admin URL.
     ctx = MimicContext()
-    url = ctx.config.get("client", "url")
+    url = ctx.config.get("server", "url")
     url = f"{url}/api/admin/{command}"
 
     import requests
