@@ -43,7 +43,7 @@ def run_server():
 
     # Web thread.
     webserver = MimicServerFlask(ctx, server)
-    if ctx.config.getboolean("client", "debug", fallback=False):
+    if ctx.config.getboolean("server", "debug", fallback=False):
         webserver.run()
     else:
         return webserver.app
